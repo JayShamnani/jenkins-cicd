@@ -1,3 +1,11 @@
 #!/bin/bash
+export WORKSPACE=`pwd`
+# Create/Activate virtualenv
+python3 -m venv venvv
+source venvv/bin/activate
+# Install Requirements
 pip3 install -r requirements.txt
-gunicorn jenkinscicd.wsgi --name jendjango --bind=0.0.0.0:8000 --daemon
+pip3 install uwsgi
+touch jenkinscicdlog.log
+killall uwsgi
+uwsgi --module=jenkinscicd.wsgi --http-socket=0.0.0.0:8023 --daemonize=jenkinscicdlog.log
